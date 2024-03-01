@@ -3,6 +3,10 @@ name: Continous integration
 on:
   pull_request:
   push:
+    branches:
+      - master
+    tags:
+      - "*"
 
 permissions:
   contents: read
