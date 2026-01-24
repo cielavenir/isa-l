@@ -219,6 +219,7 @@
 #define SYSCTL_PMULL_KEY "hw.optional.arm.FEAT_PMULL" // from macOS 12 FEAT_* sysctl infos are available
 #define SYSCTL_CRC32_KEY "hw.optional.armv8_crc32"
 #define SYSCTL_SME_KEY "hw.optional.arm.FEAT_SME"
+#define SYSCTL_SME2_KEY "hw.optional.arm.FEAT_SME2"
 #include <sys/sysctl.h>
 #include <stddef.h>
 static inline int sysctlEnabled(const char* name){

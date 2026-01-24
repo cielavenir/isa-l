@@ -80,6 +80,8 @@ DEFINE_INTERFACE_DISPATCHER(gf_vect_dot_prod)
                 return gf_vect_dot_prod_neon;
 #elif defined(__APPLE__)
         // Due to smstart, should not dispatch SME
+        // if (sysctlEnabled(SYSCTL_SME2_KEY))
+        //         return gf_vect_dot_prod_sve2;
         // if (sysctlEnabled(SYSCTL_SME_KEY))
         //         return gf_vect_dot_prod_sve;
         return gf_vect_dot_prod_neon;
@@ -98,6 +100,8 @@ DEFINE_INTERFACE_DISPATCHER(gf_vect_mad)
                 return gf_vect_mad_neon;
 #elif defined(__APPLE__)
         // Due to smstart, should not dispatch SME
+        // if (sysctlEnabled(SYSCTL_SME2_KEY))
+        //         return gf_vect_mad_sve2;
         // if (sysctlEnabled(SYSCTL_SME_KEY))
         //         return gf_vect_mad_sve;
         return gf_vect_mad_neon;
@@ -119,6 +123,8 @@ DEFINE_INTERFACE_DISPATCHER(ec_encode_data)
         if (auxval & HWCAP_ASIMD)
                 return ec_encode_data_neon;
 #elif defined(__APPLE__)
+        if (sysctlEnabled(SYSCTL_SME2_KEY))
+                return ec_encode_data_sve2;
         if (sysctlEnabled(SYSCTL_SME_KEY))
                 return ec_encode_data_sve;
         return ec_encode_data_neon;
@@ -136,6 +142,8 @@ DEFINE_INTERFACE_DISPATCHER(ec_encode_data_update)
         if (auxval & HWCAP_ASIMD)
                 return ec_encode_data_update_neon;
 #elif defined(__APPLE__)
+        if (sysctlEnabled(SYSCTL_SME2_KEY))
+                return ec_encode_data_update_sve2;
         if (sysctlEnabled(SYSCTL_SME_KEY))
                 return ec_encode_data_update_sve;
         return ec_encode_data_update_neon;
