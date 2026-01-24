@@ -142,8 +142,6 @@ DEFINE_INTERFACE_DISPATCHER(ec_encode_data_update)
         if (auxval & HWCAP_ASIMD)
                 return ec_encode_data_update_neon;
 #elif defined(__APPLE__)
-        if (sysctlEnabled(SYSCTL_SME2_KEY))
-                return ec_encode_data_update_sve2;
         if (sysctlEnabled(SYSCTL_SME_KEY))
                 return ec_encode_data_update_sve;
         return ec_encode_data_update_neon;
@@ -161,8 +159,9 @@ DEFINE_INTERFACE_DISPATCHER(gf_vect_mul)
         if (auxval & HWCAP_ASIMD)
                 return gf_vect_mul_neon;
 #elif defined(__APPLE__)
-        if (sysctlEnabled(SYSCTL_SME_KEY))
-                return gf_vect_mul_sve;
+        // Due to smstart, should not dispatch SME
+        // if (sysctlEnabled(SYSCTL_SME_KEY))
+        //         return gf_vect_mul_sve;
         return gf_vect_mul_neon;
 #endif
         return gf_vect_mul_base;
