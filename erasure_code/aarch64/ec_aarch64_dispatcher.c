@@ -177,8 +177,9 @@ DEFINE_INTERFACE_DISPATCHER(gf_vect_mul)
         if (auxval & HWCAP_ASIMD)
                 return gf_vect_mul_neon;
 #elif defined(__APPLE__)
-        if (sysctlEnabled(SYSCTL_SME_KEY))
-                return gf_vect_mul_sve;
+        // Due to smstart, should not dispatch SME
+        // if (sysctlEnabled(SYSCTL_SME_KEY))
+        //         return gf_vect_mul_sve;
         return gf_vect_mul_neon;
 #endif
         return gf_vect_mul_base;
