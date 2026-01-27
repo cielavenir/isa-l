@@ -47,7 +47,7 @@ jobs:
       - name: Build
         run: |
           ./autogen.sh
-          ./configure --prefix ${HOME}/.local
+          ./configure --prefix local
           bash -c 'make -j $(nproc)'
       - name: Run tests
         run: bash tools/test_checks.sh
@@ -57,8 +57,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
             name: macOS
-            #path: .
-            path: ${HOME}/.local
+            path: .
 
   run_tests_mingw_linux_64:
     needs: check_format
