@@ -56,8 +56,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-            name: macOS
-            path: .
+            name: erasure_code_perf_macOS
+            path: erasure_code_perf
 
   run_tests_mingw_linux_64:
     needs: check_format
