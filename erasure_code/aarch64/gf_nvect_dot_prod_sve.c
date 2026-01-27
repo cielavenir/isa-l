@@ -56,7 +56,8 @@
 //     We simply allow the compiler to generate SVE2 versions as well.
 
 #ifdef __APPLE__
-__attribute__((target("armv8-a+sme"), always_inline)) __arm_streaming
+__arm_streaming
+__attribute__((target("armv8-a+sme"), always_inline))
 #else
 __attribute__((target("armv8-a+sve"), always_inline))
 #endif
