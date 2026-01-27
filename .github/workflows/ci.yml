@@ -57,7 +57,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
             name: macOS
-            path: .
+            #path: .
+            path: ${HOME}/.local
 
   run_tests_mingw_linux_64:
     needs: check_format
