@@ -55,11 +55,10 @@
 //     can do this automatically in optimization so a separate implementation isn't required.
 //     We simply allow the compiler to generate SVE2 versions as well.
 
-__arm_streaming
 __attribute__((target("armv8-a+sme"), always_inline))
 static inline void
 gf_nvect_dot_prod_sve_unrolled(int len, int vlen, unsigned char *gftbls, unsigned char **src,
-                               unsigned char **dest, int nvect)
+                               unsigned char **dest, int nvect) __arm_streaming
 {
         if (len < 16)
                 return;
