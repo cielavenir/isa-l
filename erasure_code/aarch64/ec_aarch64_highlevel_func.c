@@ -141,7 +141,7 @@ ec_encode_data_update_neon(int len, int k, int rows, int vec_i, unsigned char *g
 
 #ifdef __APPLE__
 #define ARM_STREAMING __arm_streaming
-#define ARM_LOCAL_STREAMING __arm_local_streaming
+#define ARM_LOCALLY_STREAMING __arm_locally_streaming
 #endif
 
 /* SVE */
@@ -216,7 +216,7 @@ __attribute__((target("+sme")))
 static void
 ec_encode_data_sve_impl(int len, int k, int rows, unsigned char *g_tbls, unsigned char **data,
                         unsigned char **coding)
-ARM_LOCAL_STREAMING
+ARM_LOCALLY_STREAMING
 {
         while (rows > 7) {
                 gf_4vect_dot_prod_sve(len, k, g_tbls, data, coding);
@@ -277,7 +277,7 @@ __attribute__((target("+sme")))
 static void
 ec_encode_data_sve2_impl(int len, int k, int rows, unsigned char *g_tbls, unsigned char **data,
                          unsigned char **coding)
-ARM_LOCAL_STREAMING
+ARM_LOCALLY_STREAMING
 {
         while (rows > 7) {
                 gf_4vect_dot_prod_sve2(len, k, g_tbls, data, coding);
@@ -338,7 +338,7 @@ __attribute__((target("+sme")))
 static void
 ec_encode_data_update_sve_impl(int len, int k, int rows, int vec_i, unsigned char *g_tbls,
                                unsigned char *data, unsigned char **coding)
-ARM_LOCAL_STREAMING
+ARM_LOCALLY_STREAMING
 {
         while (rows > 6) {
                 gf_6vect_mad_sve(len, k, vec_i, g_tbls, data, coding);
