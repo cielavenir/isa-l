@@ -58,7 +58,7 @@
 __attribute__((target("+sme"), always_inline))
 static inline void
 gf_nvect_dot_prod_sve_unrolled(int len, int vlen, unsigned char *gftbls, unsigned char **src,
-                               unsigned char **dest, int nvect) __arm_streaming
+                               unsigned char **dest, int nvect) //__arm_streaming
 {
         if (len < 16)
                 return;
