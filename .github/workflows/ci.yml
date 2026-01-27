@@ -47,7 +47,7 @@ jobs:
       - name: Build
         run: |
           ./autogen.sh
-          ./configure --prefix local
+          ./configure --prefix ${PWD}/local
           bash -c 'make -j $(nproc)'
       - name: Run tests
         run: bash tools/test_checks.sh
