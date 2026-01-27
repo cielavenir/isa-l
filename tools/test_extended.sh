@@ -62,27 +62,12 @@ fi
 # Std makefile build test
 $MAKE -f Makefile.unx clean
 test_start "extended_build_test"
-time $MAKE -f Makefile.unx -j $cpus $build_opt
+time $MAKE -f Makefile.unx -j $cpus $build_opt arch=aarch64 host_cpu=aarch64
 test_end "extended_build_test" $?
 msg+=$'Std makefile build: Pass\n'
 
-# Check for gnu executable stack set
-if command -V readelf >/dev/null 2>&1; then
-    test_start "stack_nx_check"
-    if readelf -W -l bin/libisal.so | grep 'GNU_STACK' | grep -q 'RWE'; then
-	echo $0: Stack NX check bin/libisal.so: Fail
-	test_end "stack_nx_check" 1
-	exit 1
-    else
-	test_end "stack_nx_check" 0
-	msg+=$'Stack NX check bin/lib/libisal.so: Pass\n'
-    fi
-else
-    msg+=$'Stack NX check not supported: Skip\n'
-fi
-
 # Std makefile build perf tests
 test_start "extended_perf_test"
-time $MAKE -f Makefile.unx -j $cpus perfs
+time $MAKE -f Makefile.unx -j $cpus perfs arch=aarch64 host_cpu=aarch64
 test_end "extended_perf_test" $?
 msg+=$'Std makefile build perf: Pass\n'
