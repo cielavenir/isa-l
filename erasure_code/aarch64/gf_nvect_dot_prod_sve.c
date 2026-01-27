@@ -56,9 +56,9 @@
 //     We simply allow the compiler to generate SVE2 versions as well.
 
 #ifdef __APPLE__
-__attribute__((target("+sme"), always_inline))
+__attribute__((target("armv8-a+sme"), always_inline))
 #else
-__attribute__((target("+sve"), always_inline))
+__attribute__((target("armv8-a+sve"), always_inline))
 #endif
 static inline void
 gf_nvect_dot_prod_sve_unrolled(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -264,9 +264,9 @@ gf_nvect_dot_prod_sve_unrolled(int len, int vlen, unsigned char *gftbls, unsigne
 
 // Optimized wrapper functions
 #ifdef __APPLE__
-__attribute__((target("+sme")))
+__attribute__((target("armv8-a+sme")))
 #else
-__attribute__((target("+sve")))
+__attribute__((target("armv8-a+sve")))
 #endif
 void
 gf_vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -277,9 +277,9 @@ gf_vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **s
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme")))
+__attribute__((target("armv8-a+sme")))
 #else
-__attribute__((target("+sve")))
+__attribute__((target("armv8-a+sve")))
 #endif
 void
 gf_2vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -289,9 +289,9 @@ gf_2vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme")))
+__attribute__((target("armv8-a+sme")))
 #else
-__attribute__((target("+sve")))
+__attribute__((target("armv8-a+sve")))
 #endif
 void
 gf_3vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -301,9 +301,9 @@ gf_3vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme")))
+__attribute__((target("armv8-a+sme")))
 #else
-__attribute__((target("+sve")))
+__attribute__((target("armv8-a+sve")))
 #endif
 void
 gf_4vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -313,9 +313,9 @@ gf_4vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme")))
+__attribute__((target("armv8-a+sme")))
 #else
-__attribute__((target("+sve")))
+__attribute__((target("armv8-a+sve")))
 #endif
 void
 gf_5vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -325,9 +325,9 @@ gf_5vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme")))
+__attribute__((target("armv8-a+sme")))
 #else
-__attribute__((target("+sve")))
+__attribute__((target("armv8-a+sve")))
 #endif
 void
 gf_6vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -337,9 +337,9 @@ gf_6vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme")))
+__attribute__((target("armv8-a+sme")))
 #else
-__attribute__((target("+sve")))
+__attribute__((target("armv8-a+sve")))
 #endif
 void
 gf_7vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -350,9 +350,9 @@ gf_7vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **
 
 // SVE2 wrapper functions - compiler will optimize eor to eor3 automatically
 #ifdef __APPLE__
-__attribute__((target("+sme+sme2")))
+__attribute__((target("armv8-a+sme+sme2")))
 #else
-__attribute__((target("+sve+sve2")))
+__attribute__((target("armv8-a+sve+sve2")))
 #endif
 void
 gf_vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -363,9 +363,9 @@ gf_vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme+sme2")))
+__attribute__((target("armv8-a+sme+sme2")))
 #else
-__attribute__((target("+sve+sve2")))
+__attribute__((target("armv8-a+sve+sve2")))
 #endif
 void
 gf_2vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -375,9 +375,9 @@ gf_2vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char *
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme+sme2")))
+__attribute__((target("armv8-a+sme+sme2")))
 #else
-__attribute__((target("+sve+sve2")))
+__attribute__((target("armv8-a+sve+sve2")))
 #endif
 void
 gf_3vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -387,9 +387,9 @@ gf_3vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char *
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme+sme2")))
+__attribute__((target("armv8-a+sme+sme2")))
 #else
-__attribute__((target("+sve+sve2")))
+__attribute__((target("armv8-a+sve+sve2")))
 #endif
 void
 gf_4vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -399,9 +399,9 @@ gf_4vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char *
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme+sme2")))
+__attribute__((target("armv8-a+sme+sme2")))
 #else
-__attribute__((target("+sve+sve2")))
+__attribute__((target("armv8-a+sve+sve2")))
 #endif
 void
 gf_5vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -411,9 +411,9 @@ gf_5vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char *
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme+sme2")))
+__attribute__((target("armv8-a+sme+sme2")))
 #else
-__attribute__((target("+sve+sve2")))
+__attribute__((target("armv8-a+sve+sve2")))
 #endif
 void
 gf_6vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
@@ -423,9 +423,9 @@ gf_6vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char *
 }
 
 #ifdef __APPLE__
-__attribute__((target("+sme+sme2")))
+__attribute__((target("armv8-a+sme+sme2")))
 #else
-__attribute__((target("+sve+sve2")))
+__attribute__((target("armv8-a+sve+sve2")))
 #endif
 void
 gf_7vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
