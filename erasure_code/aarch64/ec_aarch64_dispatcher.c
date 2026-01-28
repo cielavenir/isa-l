@@ -123,8 +123,8 @@ DEFINE_INTERFACE_DISPATCHER(ec_encode_data)
         if (auxval & HWCAP_ASIMD)
                 return ec_encode_data_neon;
 #elif defined(__APPLE__)
-        if (sysctlEnabled(SYSCTL_SME2_KEY))
-                return ec_encode_data_sve2;
+        //if (sysctlEnabled(SYSCTL_SME2_KEY))
+        //        return ec_encode_data_sve2;
         if (sysctlEnabled(SYSCTL_SME_KEY))
                 return ec_encode_data_sve;
         return ec_encode_data_neon;
