@@ -51,7 +51,6 @@
 //     can do this automatically in optimization so a separate implementation isn't required.
 //     We simply allow the compiler to generate SVE2 versions as well.
 
-// Optimized wrapper functions
 __attribute__((target("+sve")))
 #include "gf_nvect_dot_prod_sve.h"
 
