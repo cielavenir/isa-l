@@ -28,6 +28,7 @@
 **********************************************************************/
 #ifdef __APPLE__
 #include <arm_sme.h>
+#define ARM_STREAMING __arm_streaming
 #else
 #include <arm_sve.h>
 #endif
@@ -71,6 +72,7 @@ __attribute__((target("+sve")))
 void
 gf_vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                      unsigned char *dest)
+ARM_STREAMING
 {
         unsigned char *dest_array[1] = { dest };
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest_array, 1);
@@ -84,6 +86,7 @@ __attribute__((target("+sve")))
 void
 gf_2vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                       unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 2);
 }
@@ -96,6 +99,7 @@ __attribute__((target("+sve")))
 void
 gf_3vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                       unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 3);
 }
@@ -108,6 +112,7 @@ __attribute__((target("+sve")))
 void
 gf_4vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                       unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 4);
 }
@@ -120,6 +125,7 @@ __attribute__((target("+sve")))
 void
 gf_5vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                       unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 5);
 }
@@ -132,6 +138,7 @@ __attribute__((target("+sve")))
 void
 gf_6vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                       unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 6);
 }
@@ -144,6 +151,7 @@ __attribute__((target("+sve")))
 void
 gf_7vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                       unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 7);
 }
@@ -156,6 +164,7 @@ gf_7vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **
 __attribute__((target("+sme+sme2")))
 #else
 __attribute__((target("+sve+sve2")))
+#endif
 #include "gf_nvect_dot_prod_sve.h"
 
 #ifdef __APPLE__
@@ -166,6 +175,7 @@ __attribute__((target("+sve+sve2")))
 void
 gf_vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                       unsigned char *dest)
+ARM_STREAMING
 {
         unsigned char *dest_array[1] = { dest };
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest_array, 1);
@@ -179,6 +189,7 @@ __attribute__((target("+sve+sve2")))
 void
 gf_2vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                        unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 2);
 }
@@ -191,6 +202,7 @@ __attribute__((target("+sve+sve2")))
 void
 gf_3vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                        unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 3);
 }
@@ -203,6 +215,7 @@ __attribute__((target("+sve+sve2")))
 void
 gf_4vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                        unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 4);
 }
@@ -215,6 +228,7 @@ __attribute__((target("+sve+sve2")))
 void
 gf_5vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                        unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 5);
 }
@@ -227,6 +241,7 @@ __attribute__((target("+sve+sve2")))
 void
 gf_6vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                        unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 6);
 }
@@ -239,6 +254,7 @@ __attribute__((target("+sve+sve2")))
 void
 gf_7vect_dot_prod_sve2(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                        unsigned char **dest)
+ARM_STREAMING
 {
         gf_nvect_dot_prod_sve_unrolled(len, vlen, gftbls, src, dest, 7);
 }

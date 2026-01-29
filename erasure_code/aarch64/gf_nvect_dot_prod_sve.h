@@ -1,6 +1,7 @@
 static inline void
 gf_nvect_dot_prod_sve_unrolled(int len, int vlen, unsigned char *gftbls, unsigned char **src,
                                unsigned char **dest, int nvect)
+ARM_STREAMING
 {
         if (len < 16)
                 return;
