@@ -210,8 +210,7 @@ gf_6vect_mad_sve(int len, int vec, int vec_i, unsigned char *gftbls, unsigned ch
                  unsigned char **dest) ARM_STREAMING;
 
 #ifdef __APPLE__
-__arm_locally_streaming
-__attribute__((target("+sme")))
+__arm_locally_streaming __attribute__((target("+sme")))
 #endif
 static void
 ec_encode_data_sve_impl(int len, int k, int rows, unsigned char *g_tbls, unsigned char **data,
@@ -271,8 +270,7 @@ ec_encode_data_sve(int len, int k, int rows, unsigned char *g_tbls, unsigned cha
 }
 
 #ifdef __APPLE__
-__arm_locally_streaming
-__attribute__((target("+sme")))
+__arm_locally_streaming __attribute__((target("+sme")))
 #endif
 static void
 ec_encode_data_sve2_impl(int len, int k, int rows, unsigned char *g_tbls, unsigned char **data,
@@ -332,8 +330,7 @@ ec_encode_data_sve2(int len, int k, int rows, unsigned char *g_tbls, unsigned ch
 }
 
 #ifdef __APPLE__
-__arm_locally_streaming
-__attribute__((target("+sme")))
+__arm_locally_streaming __attribute__((target("+sme")))
 #endif
 static void
 ec_encode_data_update_sve_impl(int len, int k, int rows, int vec_i, unsigned char *g_tbls,
