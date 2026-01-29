@@ -56,9 +56,9 @@
 //     We simply allow the compiler to generate SVE2 versions as well.
 
 #ifdef __APPLE__
-__attribute__((target("+sme"), always_inline))
+__attribute__((target("+sme")))
 #else
-__attribute__((target("+sve"), always_inline))
+__attribute__((target("+sve")))
 #endif
 #include "gf_nvect_dot_prod_sve.h"
 
@@ -152,6 +152,9 @@ gf_7vect_dot_prod_sve(int len, int vlen, unsigned char *gftbls, unsigned char **
 
 #define gf_nvect_dot_prod_sve_unrolled gf_nvect_dot_prod_sve_unrolled2
 
+#ifdef __APPLE__
+__attribute__((target("+sme+sme2")))
+#else
 __attribute__((target("+sve+sve2")))
 #include "gf_nvect_dot_prod_sve.h"
 
