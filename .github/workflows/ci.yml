@@ -210,7 +210,7 @@ jobs:
           echo "patched:  $(git log -1 --oneline HEAD)"
           git worktree add ../isa-l-base "$base"
           for dir in ../isa-l-base .; do
-            (cd "$dir" && ./autogen.sh && ./configure && make -j "$(sysctl -n hw.ncpu)" crc/crc32_iscsi_perf)
+            (cd "$dir" && ./autogen.sh && ./configure --disable-shared && make -j "$(sysctl -n hw.ncpu)" crc/crc32_iscsi_perf)
           done
       - name: Run crc32_iscsi_perf (alternating, 5 rounds)
         run: |
