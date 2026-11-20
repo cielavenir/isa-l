@@ -38,15 +38,14 @@ struct kernel {
 };
 
 static const struct kernel kernels[] = {
-        { "crc_ext", crc32_iscsi_crc_ext },
-        { "3crc_fold", crc32_iscsi_3crc_fold },
-        { "refl_pmull", crc32_iscsi_refl_pmull },
-        { "x6", crc32_iscsi_x6 },
+        { "crc_ext", crc32_iscsi_crc_ext },       { "3crc_fold", crc32_iscsi_3crc_fold },
+        { "refl_pmull", crc32_iscsi_refl_pmull }, { "x6", crc32_iscsi_x6 },
         { "dispatched", crc32_iscsi_dispatched },
 };
 #define KERNEL_COUNT (int) (sizeof(kernels) / sizeof(kernels[0]))
 
-static const int sizes[] = { 64, 128, 256, 512, 1000, 1023, 1024, 1025, 2048, 4096, 8192, 65536, 1048576 };
+static const int sizes[] = { 64,   128,  256,  512,  1000,  1023,   1024,
+                             1025, 2048, 4096, 8192, 65536, 1048576 };
 #define SIZE_COUNT (int) (sizeof(sizes) / sizeof(sizes[0]))
 
 #define ROUNDS         15
@@ -153,9 +152,8 @@ main(void)
                         }
                         for (int index = 0; index < KERNEL_COUNT; index++) {
                                 int kernel_index = order[index];
-                                samples[size_index][kernel_index][round] =
-                                        sample(kernels[kernel_index].function, buffer,
-                                               sizes[size_index]);
+                                samples[size_index][kernel_index][round] = sample(
+                                        kernels[kernel_index].function, buffer, sizes[size_index]);
                         }
                 }
         }
