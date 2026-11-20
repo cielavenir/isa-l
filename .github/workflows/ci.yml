@@ -188,39 +188,40 @@ jobs:
           erasure_code/gf_vect_mul_base_test.run erasure_code/gf_vect_dot_prod_base_test.run
           erasure_code/gf_vect_dot_prod_test.run erasure_code/gf_vect_mad_test.run'
 
-  crc32_iscsi_perf_macos:
+  crc32_iscsi_bench:
     needs: check_format
-    runs-on: macos-15  # arm64
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-15  # arm64
+          - ubuntu-26.04-arm
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: 0
       - name: Untap untrusted taps (macOS)
         run: brew untap aws/tap || true
+        if: runner.os == 'macOS'
       - name: Install build dependencies (macOS)
         run: brew install automake autoconf coreutils libtool
+        if: runner.os == 'macOS'
       - name: Show CPU features
         run: |
-          sysctl machdep.cpu.brand_string hw.ncpu
-          sysctl -a | grep -E 'hw.optional.(armv8_crc32|arm.FEAT_PMULL|arm.FEAT_SVE)' || true
-      - name: Build baseline (master) and patched
+          if [ "$RUNNER_OS" = macOS ]; then
+            sysctl machdep.cpu.brand_string hw.ncpu
+            sysctl -a | grep -E 'hw.optional.(armv8_crc32|arm.FEAT_PMULL|arm.FEAT_SVE)' || true
+          else
+            lscpu
+          fi
+      - name: Build libisal (static)
         run: |
-          base=$(git merge-base HEAD origin/master)
-          echo "baseline: $(git log -1 --oneline "$base")"
-          echo "patched:  $(git log -1 --oneline HEAD)"
-          git worktree add ../isa-l-base "$base"
-          for dir in ../isa-l-base .; do
-            (cd "$dir" && ./autogen.sh && ./configure --disable-shared && make -j "$(sysctl -n hw.ncpu)" crc/crc32_iscsi_perf)
-          done
-      - name: Run crc32_iscsi_perf (alternating, 5 rounds)
+          ./autogen.sh
+          ./configure --disable-shared
+          make -j "$(getconf _NPROCESSORS_ONLN)" libisal.la
+      - name: Build and run crc32_iscsi benchmark
         run: |
-          for round in 1 2 3 4 5; do
-            echo "=== round $round"
-            echo "--- baseline (crc32_iscsi_3crc_fold)"
-            ../isa-l-base/crc/crc32_iscsi_perf
-            echo "--- patched (crc32_iscsi_x6)"
-            ./crc/crc32_iscsi_perf
-          done
+          cc -O2 -Iinclude .github/bench/crc32_iscsi_bench.c .libs/libisal.a -o crc32_iscsi_bench
+          ./crc32_iscsi_bench
 
   run_cmake_tests_unix:
     needs: check_format
