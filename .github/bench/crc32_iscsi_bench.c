@@ -5,7 +5,11 @@
  *    and several buffer offsets.
  * 2. Times every kernel at a set of sizes: warm cache, one thread, the same
  *    64-byte-aligned buffer, randomized kernel order per round, median of
- *    all rounds.
+ *    all rounds. Two seed modes are measured:
+ *    - chained: each call's result is the next call's seed (calls cannot
+ *      overlap; latency-bound, like one CRC over consecutive buffers);
+ *    - fixed: every call uses TEST_SEED like crc32_iscsi_perf.c (calls are
+ *      independent and may overlap, like many separate block CRCs).
  */
 #include <stdint.h>
 #include <stdio.h>
@@ -52,6 +56,13 @@ static const int sizes[] = { 64,   128,  256,  512,  1000,  1023,   1024,
 #define SAMPLE_SECONDS 0.03
 #define CHECK_MAX_LEN  4200
 #define BUFFER_SIZE    (1048576 + 64)
+#define TEST_SEED      0x1234
+
+enum seed_mode { MODE_CHAINED, MODE_FIXED, MODE_COUNT };
+static const char *const mode_names[MODE_COUNT] = {
+        "chained seed (crc = f(buf, len, crc))",
+        "fixed seed (f(buf, len, TEST_SEED), like crc32_iscsi_perf.c)",
+};
 
 static double
 now_seconds(void)
@@ -72,7 +83,7 @@ static volatile unsigned int sink;
 
 /* Throughput in GB/s (decimal) of one sample of about SAMPLE_SECONDS. */
 static double
-sample(crc_function function, unsigned char *buffer, int length)
+sample(crc_function function, unsigned char *buffer, int length, enum seed_mode mode)
 {
         long iterations = 0;
         long batch = 1;
@@ -81,8 +92,12 @@ sample(crc_function function, unsigned char *buffer, int length)
         double elapsed;
 
         do {
-                for (long index = 0; index < batch; index++)
-                        crc = function(buffer, length, crc);
+                if (mode == MODE_CHAINED)
+                        for (long index = 0; index < batch; index++)
+                                crc = function(buffer, length, crc);
+                else
+                        for (long index = 0; index < batch; index++)
+                                crc ^= function(buffer, length, TEST_SEED);
                 iterations += batch;
                 batch *= 2;
                 elapsed = now_seconds() - start;
@@ -125,7 +140,7 @@ int
 main(void)
 {
         unsigned char *buffer;
-        static double samples[SIZE_COUNT][KERNEL_COUNT][ROUNDS];
+        static double samples[MODE_COUNT][SIZE_COUNT][KERNEL_COUNT][ROUNDS];
         int order[KERNEL_COUNT];
 
         if (posix_memalign((void **) &buffer, 64, BUFFER_SIZE)) {
@@ -141,7 +156,9 @@ main(void)
                CHECK_MAX_LEN, failures ? "FAIL" : "PASS", failures);
 
         for (int round = 0; round < ROUNDS; round++) {
-                for (int size_index = 0; size_index < SIZE_COUNT; size_index++) {
+                for (int unit = 0; unit < MODE_COUNT * SIZE_COUNT; unit++) {
+                        int mode = unit / SIZE_COUNT;
+                        int size_index = unit % SIZE_COUNT;
                         for (int index = 0; index < KERNEL_COUNT; index++)
                                 order[index] = index;
                         for (int index = KERNEL_COUNT - 1; index > 0; index--) {
@@ -152,27 +169,31 @@ main(void)
                         }
                         for (int index = 0; index < KERNEL_COUNT; index++) {
                                 int kernel_index = order[index];
-                                samples[size_index][kernel_index][round] = sample(
-                                        kernels[kernel_index].function, buffer, sizes[size_index]);
+                                samples[mode][size_index][kernel_index][round] =
+                                        sample(kernels[kernel_index].function, buffer,
+                                               sizes[size_index], (enum seed_mode) mode);
                         }
                 }
         }
 
-        printf("median throughput, GB/s (decimal), %d rounds x ~%.0f ms per sample\n\n", ROUNDS,
-               SAMPLE_SECONDS * 1000);
-        printf("| Bytes |");
-        for (int kernel_index = 0; kernel_index < KERNEL_COUNT; kernel_index++)
-                printf(" %s |", kernels[kernel_index].name);
-        printf("\n|---:|");
-        for (int kernel_index = 0; kernel_index < KERNEL_COUNT; kernel_index++)
-                printf("---:|");
-        printf("\n");
-        for (int size_index = 0; size_index < SIZE_COUNT; size_index++) {
-                printf("| %d |", sizes[size_index]);
-                for (int kernel_index = 0; kernel_index < KERNEL_COUNT; kernel_index++) {
-                        qsort(samples[size_index][kernel_index], ROUNDS, sizeof(double),
-                              compare_double);
-                        printf(" %.2f |", samples[size_index][kernel_index][ROUNDS / 2]);
+        for (int mode = 0; mode < MODE_COUNT; mode++) {
+                printf("%s: median throughput, GB/s (decimal), %d rounds x ~%.0f ms per sample\n\n",
+                       mode_names[mode], ROUNDS, SAMPLE_SECONDS * 1000);
+                printf("| Bytes |");
+                for (int kernel_index = 0; kernel_index < KERNEL_COUNT; kernel_index++)
+                        printf(" %s |", kernels[kernel_index].name);
+                printf("\n|---:|");
+                for (int kernel_index = 0; kernel_index < KERNEL_COUNT; kernel_index++)
+                        printf("---:|");
+                printf("\n");
+                for (int size_index = 0; size_index < SIZE_COUNT; size_index++) {
+                        printf("| %d |", sizes[size_index]);
+                        for (int kernel_index = 0; kernel_index < KERNEL_COUNT; kernel_index++) {
+                                double *cell = samples[mode][size_index][kernel_index];
+                                qsort(cell, ROUNDS, sizeof(double), compare_double);
+                                printf(" %.2f |", cell[ROUNDS / 2]);
+                        }
+                        printf("\n");
                 }
                 printf("\n");
         }
